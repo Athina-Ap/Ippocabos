@@ -20,19 +20,21 @@ fits = p.Results.fits;
 data = p.Results.data;
 postprocess = p.Results.postprocess;
 
-sessions = {'IZ39\Final\IZ39_220622_sess8', 'IZ39\Final\IZ39_220624_sess10', 'IZ39\Final\IZ39_220629_sess12',...
-    'IZ39\Final\IZ39_220702_sess14','IZ39\Final\IZ39_220714_sess18',...
-    'IZ39\Final\IZ39_220705_sess16','IZ39\Final\IZ39_220707_sess17',...  
-    'IZ40\Final\IZ40_220705_sess15','IZ40\Final\IZ40_220707_sess16',...
-    'IZ40\Final\IZ40_220708_sess17','IZ40\Final\IZ40_220714_sess18',...
-    'IZ43\Final\IZ43_220826_sess2','IZ43\Final\IZ43_220828_sess4',...
-    'IZ43\Final\IZ43_220830_sess6','IZ43\Final\IZ43_220901_sess8',...
-'IZ43\Final\IZ43_220911_sess9','IZ43\Final\IZ43_220913_sess11','IZ43\Final\IZ43_220919_sess14',...
-'IZ43\Final\IZ43_220915_sess13','IZ43\Final\IZ43_220920_sess15',...    
-    'IZ44\Final\IZ44_220827_sess4','IZ44\Final\IZ44_220828_sess5',...
-    'IZ44\Final\IZ44_220829_sess6','IZ44\Final\IZ44_220830_sess7',...
- 'IZ44\Final\IZ44_220912_sess10','IZ44\Final\IZ44_220913_sess11','IZ44\Final\IZ44_220919_sess14',...
- 'IZ44\Final\IZ44_220915_sess13','IZ44\Final\IZ44_220920_sess15'};
+% sessions = {'IZ39\Final\IZ39_220622_sess8', 'IZ39\Final\IZ39_220624_sess10', 'IZ39\Final\IZ39_220629_sess12',...
+%     'IZ39\Final\IZ39_220702_sess14','IZ39\Final\IZ39_220714_sess18',...
+%     'IZ39\Final\IZ39_220705_sess16','IZ39\Final\IZ39_220707_sess17',...  
+%     'IZ40\Final\IZ40_220705_sess15','IZ40\Final\IZ40_220707_sess16',...
+%     'IZ40\Final\IZ40_220708_sess17','IZ40\Final\IZ40_220714_sess18',...
+%     'IZ43\Final\IZ43_220826_sess2','IZ43\Final\IZ43_220828_sess4',...
+%     'IZ43\Final\IZ43_220830_sess6','IZ43\Final\IZ43_220901_sess8',...
+% 'IZ43\Final\IZ43_220911_sess9','IZ43\Final\IZ43_220913_sess11','IZ43\Final\IZ43_220919_sess14',...
+% 'IZ43\Final\IZ43_220915_sess13','IZ43\Final\IZ43_220920_sess15',...    
+%     'IZ44\Final\IZ44_220827_sess4','IZ44\Final\IZ44_220828_sess5',...
+%     'IZ44\Final\IZ44_220829_sess6','IZ44\Final\IZ44_220830_sess7',...
+%  'IZ44\Final\IZ44_220912_sess10','IZ44\Final\IZ44_220913_sess11','IZ44\Final\IZ44_220919_sess14',...
+%  'IZ44\Final\IZ44_220915_sess13','IZ44\Final\IZ44_220920_sess15'};
+sessions = {'IZ47\Final\IZ47_230707_sess24', 'IZ47\Final\IZ47_230710_sess25', ...
+    'IZ47\Final\IZ47_230712_sess27', 'IZ48\Final\IZ48_230705_sess22'};
 
 for s = 1:length(sessions)
     session = extractAfter(sessions{s}, 'Final\');
@@ -123,6 +125,7 @@ for s = 1:length(sessions)
 
     resultsPGAM.stats.neuronsFit = neurons;
     resultsPGAM.stats.pyramidalFit = pyramidal;
+
     %% Find the cells tuned to each variable 
 
     % Pyramidal cells
@@ -255,87 +258,8 @@ for s = 1:length(sessions)
     resultsPGAM.proportions.y_licks_prop_all = y_licks_prop_all;
     resultsPGAM.proportions.y_licks_relDistStop_prop_all = y_licks_relDistStop_prop_all;
 
-
-    %% Plot the proportions
-    variable_names = ["y", "ylin", "relDistStop", "licks", "y relDistStop", ...
-            "licks relDistStop", "y licks", "y licks relDistStop"];
-
-    % Pyramidal cells
-    variables = [yProp, ylinProp, relDistStopProp, licksProp, ...
-        y_relDistStop_prop, licks_relDistStop_prop, y_licks_prop, ...
-        y_licks_relDistStop_prop];
-        
-    figure;
-    hold on
-    for v = 1:length(variables)
-        bar(v, variables(v), 'EdgeColor', [0.4 0.4 0.4], 'FaceColor', [0.7 0.7 0.7])
-    end
-    xlim([0, length(variables)+1])
-    ylim([0,1])
-    set(gca,'XTick', 1:length(variables), 'XTickLabel', variable_names);
-    title('Percentage of pyramidal cells tuned to each variable and their combinations.')
     
-    saveas(gcf, fullfile(postprocessDir, 'percVariableTuning_pyramidal'), 'fig');
-    saveas(gcf, fullfile(postprocessDir, 'percVariableTuning_pyramidal'), 'png');
-
-    close(figure(1));
-
-    % All neurons
-    variables_all = [yProp_all, ylinProp_all, relDistStopProp_all, licksProp_all, ...
-        y_relDistStop_prop_all, licks_relDistStop_prop_all, y_licks_prop_all, ...
-        y_licks_relDistStop_prop_all];
-    
-    figure;
-    hold on
-    for v = 1:length(variables_all)
-        bar(v, variables_all(v), 'EdgeColor', [0.4 0.4 0.4], 'FaceColor', [0.7 0.7 0.7])
-    end
-    xlim([0, length(variables_all)+1])
-    ylim([0,1])
-    set(gca,'XTick', 1:length(variables_all), 'XTickLabel', variable_names);
-    title('Percentage of neurons tuned to each variable and their combinations.')
-    
-    saveas(gcf, fullfile(postprocessDir, 'percVariableTuning_neurons'), 'fig');
-    saveas(gcf, fullfile(postprocessDir, 'percVariableTuning_neurons'), 'png');
-
-    close(figure(1));
     %% TODO: Calculate the PSTH    
-    
-    %% Select cells tuned to relDistStop based on the mutual information 
-    % (pyramidal only).
-
-    % y vs relDistStop 
-    cells_y_relDistStop = pyramidal(tuned_y == 1 & tuned_relDistStop == 1);
-    
-    mi_y = zeros(length(cells_y_relDistStop), 1);
-    mi_relDistStop = zeros(length(cells_y_relDistStop), 1);
-    
-    tuned_relDistStop_mi = zeros(length(cells_y_relDistStop), 1);
-    
-    for i = 1:length(cells_y_relDistStop)
-        results = readtable(fullfile(resultsDir, strcat('spatial_neuron_', ...
-        string(cells_y_relDistStop(i)), '_fit_k-fold.csv')));
-
-        mi_y(i, 1) = table2array(results(2, 11));
-        mi_relDistStop(i, 1) = table2array(results(4, 11));
-   
-    end
-    
-    % Normalize the MI
-    normMI_relDistStop = normalize(mi_relDistStop, "range");
-    normMI_y = normalize(mi_y, "range");
-    
-    for i = 1:length(cells_y_relDistStop)
-        if normMI_y(i, 1) < normMI_relDistStop(i, 1)
-            tuned_relDistStop_mi(i, 1) = 1;
-        end 
-    end
-    
-    resultsPGAM.MI.tuned_relDistStop_mi = cells_y_relDistStop(tuned_relDistStop_mi==1)';
-    resultsPGAM.MI.tuned_relDistStop_mi_licks = intersect(resultsPGAM.MI.tuned_relDistStop_mi, ...
-        pyramidal(tuned_licks==1));
-    resultsPGAM.MI.tuned_relDistStop_mi_nolicks = intersect(resultsPGAM.MI.tuned_relDistStop_mi, ...
-        pyramidal(tuned_licks==0));
    
     %% Select cells tuned to licks with positive kernel (pyramidal only).
     tunedLicks = resultsPGAM.tuned_licks;
@@ -351,8 +275,227 @@ for s = 1:length(sessions)
         end
     end
     
-    resultsPGAM.kernelStrength_licks = tunedLicks(kernelStrength_licks==1)';
+    resultsPGAM.tuned_licksP = tunedLicks(kernelStrength_licks==1)';
     
+    positiveLicksProp = length(tunedLicks(kernelStrength_licks==1)) / length(pyramidal);
+    resultsPGAM.proportions.positiveLicksProp = positiveLicksProp;
+
+    %% Select cells tuned to y and ylin with fields in the forward run 
+    % (pyrmidal only). To determine that, we look at the raw firing rate
+    % used for training the PGAM. 
+
+    tunedY = resultsPGAM.tuned_y;
+    tunedYlin = resultsPGAM.tuned_ylin;
+
+    forward_y = zeros(length(tunedY),1);
+    forward_ylin = zeros(length(tunedYlin),1);
+
+    for i = 1:length(tunedY)
+        results = readtable(fullfile(resultsDir, strcat('spatial_neuron_', ...
+            string(tunedY(i)), '_fit_k-fold.csv')));
+
+        rates = table2array(results(1,14));
+        if ~iscell(rates)
+            continue
+        else
+            rates = rates{1};
+            stringData = strrep(rates, '[', '');
+            stringData = strrep(stringData, ']', '');
+            stringData = strrep(stringData, '↵', '');
+            raw_rate = regexp(stringData, '\s+', 'split');        
+            raw_rate = str2double(raw_rate);
+        end
+
+        % The 240cm forward and reverse virtual linear track is split into
+        % 15 bins for the PGAM fits. To only consider the forward
+        % direction, we will look at the first half of the bins (8 bins -
+        % 128 cm). 
+        max_rate = max(raw_rate);
+        if intersect(max_rate, raw_rate(1:8))
+            forward_y(i) = 1;
+        end     
+    end
+
+    for i = 1:length(tunedYlin)
+        results = readtable(fullfile(resultsDir, strcat('spatial_neuron_', ...
+            string(tunedYlin(i)), '_fit_k-fold.csv')));
+        
+        rates = table2array(results(2,14));
+        if ~iscell(rates)
+            continue
+        else
+            rates = rates{1};
+            stringData = strrep(rates, '[', '');
+            stringData = strrep(stringData, ']', '');
+            stringData = strrep(stringData, '↵', '');
+            raw_rate = regexp(stringData, '\s+', 'split');        
+            raw_rate = str2double(raw_rate);
+        end
+
+        max_rate = max(raw_rate);
+        if intersect(max_rate, raw_rate(1:8))
+            forward_ylin(i) = 1;
+        end     
+    end
+
+    resultsPGAM.tuned_YFor = tunedY(forward_y==1)';
+    resultsPGAM.tuned_YForLin = tunedYlin(forward_ylin==1)';
+
+    forwardYProp = length(tunedY(forward_y==1)) / length(pyramidal);
+    forwardYLinProp = length(tunedYlin(forward_ylin==1)) / length(pyramidal);
+
+    resultsPGAM.proportions.YForProp = forwardYProp;
+    resultsPGAM.proportions.YForLinProp = forwardYLinProp;
+
+    %% Calculate new tunings and proportions 
+    tuned_yFor_relDistStop = intersect(tunedY(forward_y==1), pyramidal(tuned_relDistStop==1))';
+    tuned_licksP_relDistStop = intersect(tunedLicks(kernelStrength_licks == 1), pyramidal(tuned_relDistStop==1))';
+    tuned_yFor_licksP = intersect(tunedLicks(kernelStrength_licks == 1), tunedY(forward_y==1))';
+    tuned_y_licksP = intersect(tunedLicks(kernelStrength_licks == 1), tunedY)';
+    tuned_yFor_licksP_relDistStop = intersect(tunedLicks(kernelStrength_licks == 1), ...
+        intersect(tunedY(forward_y==1), pyramidal(tuned_relDistStop==1)));
+
+    resultsPGAM.yFor_relDistStop = tuned_yFor_relDistStop;
+    resultsPGAM.licksP_relDistStop = tuned_licksP_relDistStop;
+    resultsPGAM.yFor_licksP = tuned_yFor_licksP;
+    resultsPGAM.yFor_licksp_relDistStop = tuned_yFor_licksP_relDistStop;
+    
+    yFor_relDistStop_prop = length(tuned_yFor_relDistStop) / length(pyramidal);
+    licksP_relDistStop_prop = length(tuned_licksP_relDistStop) / length(pyramidal);
+    yFor_licksP_prop = length(tuned_yFor_licksP) / length(pyramidal);
+    yFor_licksp_relDistStop_prop = length(tuned_yFor_licksP_relDistStop) / length(pyramidal);
+    y_licksP_prop = length(tuned_y_licksP) / length(pyramidal);
+    
+    resultsPGAM.proportions.yFor_relDistStop_prop = yFor_relDistStop_prop;
+    resultsPGAM.proportions.licksP_relDistStop_prop = licksP_relDistStop_prop;
+    resultsPGAM.proportions.yFor_licksp_prop = yFor_licksP_prop;
+    resultsPGAM.proportions.y_licksP_prop = y_licksP_prop;
+    resultsPGAM.proportions.yFor_licksp_relDistStop_prop = yFor_licksp_relDistStop_prop;
+
+    %% Select cells tuned to relDistStop based on the mutual information. 
+    % Similarly, select cells tuned to y based on the mutual information 
+    % (pyramidal only).
+
+    % y vs relDistStop 
+    cells_yFor_relDistStop = intersect(tunedY(forward_y==1), pyramidal(tuned_relDistStop==1));
+    
+    mi_yFor = zeros(length(cells_yFor_relDistStop), 1);
+    mi_relDistStop = zeros(length(cells_yFor_relDistStop), 1);
+    
+    tuned_relDistStop_mi = zeros(length(cells_yFor_relDistStop), 1);
+    tuned_yFor_mi = zeros(length(cells_yFor_relDistStop), 1);
+    
+    for i = 1:length(cells_yFor_relDistStop)
+        results = readtable(fullfile(resultsDir, strcat('spatial_neuron_', ...
+        string(cells_yFor_relDistStop(i)), '_fit_k-fold.csv')));
+
+        mi_yFor(i, 1) = table2array(results(2, 11));
+        mi_relDistStop(i, 1) = table2array(results(4, 11));
+   
+    end
+    
+    % Normalize the MI
+    normMI_relDistStop = normalize(mi_relDistStop, "range");
+    normMI_yFor = normalize(mi_yFor, "range");
+    
+    for i = 1:length(cells_yFor_relDistStop)
+        if normMI_yFor(i, 1) < normMI_relDistStop(i, 1)
+            tuned_relDistStop_mi(i, 1) = 1;
+        else
+            tuned_yFor_mi(i, 1) = 1;
+        end 
+    end
+    
+    resultsPGAM.MI.tuned_relDistStop_mi = cells_yFor_relDistStop(tuned_relDistStop_mi==1)';
+    resultsPGAM.MI.tuned_yFor_mi = cells_yFor_relDistStop(tuned_yFor_mi==1)';
+
+    resultsPGAM.MI.tuned_relDistStop_mi_licks = intersect(resultsPGAM.MI.tuned_relDistStop_mi, ...
+        tunedLicks(kernelStrength_licks==1));
+    resultsPGAM.MI.tuned_relDistStop_mi_nolicks = intersect(resultsPGAM.MI.tuned_relDistStop_mi, ...
+        tunedLicks(kernelStrength_licks==1));
+
+    relDistStop_mi_prop = length(resultsPGAM.MI.tuned_relDistStop_mi) / length(cells_yFor_relDistStop);
+    yFor_mi_prop = length(resultsPGAM.MI.tuned_yFor_mi) / length(cells_yFor_relDistStop);
+    relDistStop_licks_mi_prop = length(resultsPGAM.MI.tuned_relDistStop_mi_licks) / length(cells_yFor_relDistStop);
+
+    resultsPGAM.MI.relDistStop_mi_prop = relDistStop_mi_prop;
+    resultsPGAM.MI.yFor_mi_prop = yFor_mi_prop;
+    resultsPGAM.MI.relDistStop_licks_mi_prop = relDistStop_licks_mi_prop;
+
+
+    %% Plot the proportions
+    
+    % Plot A
+    % Tuning to licks with positive kernel only 
+    % Tuning to y and ylin in the forward direction only 
+
+    variable_names = ["y", "ylin", "relDistStop", "licks", "y relDistStop", ...
+            "licks relDistStop", "y licks", "y licks relDistStop"];
+
+    variables = [yProp, ylinProp, relDistStopProp, positiveLicksProp, ...
+        yFor_relDistStop_prop, licksP_relDistStop_prop, y_licksP_prop, ...
+        yFor_licksp_relDistStop_prop];
+        
+    figure('Position', [100 100 1300 900]);
+    subplot(1,2,1)
+    hold on
+    for v = 1:length(variables)
+        h = bar(v, variables(v), 'EdgeColor', [0.5 0.5 0.5]);
+        if v == 5
+            h.FaceColor = [0.3 0.3 0.3];
+        else
+            h.FaceColor = [0.7 0.7 0.7];
+        end
+    end
+    xlim([0, length(variables)+1])
+    ylim([0,1])
+    set(gca,'XTick', 1:length(variables), 'XTickLabel', variable_names);
+    title('Percentage of pyramidal cells tuned to each variable and their combinations.')
+    
+    % Plot B 
+    % Cells tuned to BOTH y and relDistStop 
+
+    % Tuning to licks with positive kernel only 
+    % Tuning to y in the forward direction only and MI > relDistStop
+    % Tuning to relDistStop and MI > y
+    variable_names = ["y > relDistStop", "relDistStop > y", "relDistStop > y & licks"];
+    variables = [yFor_mi_prop, relDistStop_mi_prop, relDistStop_licks_mi_prop];
+        
+    subplot(1,2,2)
+    hold on
+    for v = 1:length(variables)
+        bar(v, variables(v), 'EdgeColor', [0.5 0.5 0.5], 'FaceColor', [0.3 0.3 0.3])
+    end
+    xlim([0, length(variables)+1])
+    ylim([0,1])
+    set(gca,'XTick', 1:length(variables), 'XTickLabel', variable_names);
+    title('Proportion of cells "preferentially" tuned to both y and relDistStop.')
+    
+    saveas(gcf, fullfile(postprocessDir, 'percVariableTuning'), 'fig');
+    saveas(gcf, fullfile(postprocessDir, 'percVariableTuning'), 'png');
+
+    close(figure(1));
+
+    % All neurons
+%     variables_all = [yProp_all, ylinProp_all, relDistStopProp_all, licksProp_all, ...
+%         y_relDistStop_prop_all, licks_relDistStop_prop_all, y_licks_prop_all, ...
+%         y_licks_relDistStop_prop_all];
+%     
+%     figure;
+%     hold on
+%     for v = 1:length(variables_all)
+%         bar(v, variables_all(v), 'EdgeColor', [0.4 0.4 0.4], 'FaceColor', [0.7 0.7 0.7])
+%     end
+%     xlim([0, length(variables_all)+1])
+%     ylim([0,1])
+%     set(gca,'XTick', 1:length(variables_all), 'XTickLabel', variable_names);
+%     title('Percentage of neurons tuned to each variable and their combinations.')
+%     
+%     saveas(gcf, fullfile(postprocessDir, 'percVariableTuning_neurons'), 'fig');
+%     saveas(gcf, fullfile(postprocessDir, 'percVariableTuning_neurons'), 'png');
+% 
+%     close(figure(1));
+
     %% Save results
     if exist(fullfile(postprocessDir, strcat(session, '.postprocessPGAM.mat')))
         delete(fullfile(postprocessDir, strcat(session, '.postprocessPGAM.mat')));
